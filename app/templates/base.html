@@ -14,19 +14,25 @@
 <body class="bg-gray-100 font-serif text-gray-800">
     <!-- Barre de navigation -->
     <nav class="navbar flex justify-between items-center px-6 py-4">
-        <div class="text-2xl font-bold">PandaSecurityHub</div>
+        <div class="flex items-center space-x-3">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="PandaSecurityHub Logo" class="h-10 w-10">
+            <div class="text-2xl font-bold">PandaSecurityHub</div>
+        </div>
         <div class="space-x-4">
-            <a href="{{ url_for('main.index') }}" class="hover:underline">Accueil</a>
-            <a href="{{ url_for('main.about') }}" class="hover:underline">À propos</a>
-            <a href="{{ url_for('main.services') }}" class="hover:underline">Prestations</a>
-            <a href="{{ url_for('main.contact') }}" class="hover:underline">Contact</a>
+            <a href="{{ url_for('main.index') }}" class="hover:underline">Accueil 🏠</a>
+            <a href="{{ url_for('main.about') }}" class="hover:underline">À propos ℹ️</a>
+            <a href="{{ url_for('main.services') }}" class="hover:underline">Prestations 🛠️</a>
+            <a href="{{ url_for('main.contact') }}" class="hover:underline">Contact 📧</a>
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('main.profile') }}" class="hover:underline">Profil</a>
-                <a href="{{ url_for('main.dashboard') }}" class="hover:underline">Dashboard</a>
-                <a href="{{ url_for('main.logout') }}" class="hover:underline">Déconnexion</a>
+                <a href="{{ url_for('main.profile') }}" class="hover:underline">Profil 👤</a>
+                {% if current_user.is_admin %}
+                    <a href="{{ url_for('main.admin') }}" class="hover:underline">Admin ⚙️</a>
+                {% endif %}
+                <a href="{{ url_for('main.dashboard') }}" class="hover:underline">Dashboard 📝</a>
+                <a href="{{ url_for('main.logout') }}" class="hover:underline">Déconnexion 🚪</a>
             {% else %}
-                <a href="{{ url_for('main.login') }}" class="hover:underline">Connexion</a>
-                <a href="{{ url_for('main.register') }}" class="hover:underline">Inscription</a>
+                <a href="{{ url_for('main.login') }}" class="hover:underline">Connexion 🔐</a>
+                <a href="{{ url_for('main.register') }}" class="hover:underline">Inscription 📋</a>
             {% endif %}
         </div>
     </nav>
@@ -36,7 +42,7 @@
         {% if messages %}
             <div class="container mx-auto px-4 py-4">
                 {% for category, message in messages %}
-                    <div class="bg-{{ 'green' if category == 'success' else 'red' }}-100 text-{{ 'green' if category == 'success' else 'red' }}-800 p-4 rounded mb-4">
+                    <div class="bg-{{ 'green' if category == 'success' else 'red' }}-100 text-{{ 'green' if category == 'success' else 'red' }}-800 p-4 rounded mb-4 border {{ 'border-green-500' if category == 'success' else 'border-red-500' }}">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -45,16 +51,20 @@
     {% endwith %}
 
     <!-- Contenu principal -->
-    <main>
+    <main class="min-h-screen">
         {% block content %}
         {% endblock %}
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2025 PandaSecurityHub. Tous droits réservés.</p>
-        <p>En partenariat avec <a href="https://pandacodeur.com" class="text-blue-400 hover:underline">PandaCodeur</a> et <a href="https://youtube.com/GeniusClassrooms" class="text-blue-400 hover:underline">GeniusClassrooms</a>.</p>
-        <p>Propulsé par <a href="#" class="text-blue-400 hover:underline">NkiliTech</a> - Par Yankam Ngueguim Joel Stephane.</p>
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p class="text-lg">&copy; 2025 PandaSecurityHub. Tous droits réservés. 🐼</p>
+            <div class="mt-4 space-y-2">
+                <p>En partenariat avec <a href="https://pandacodeur.com" class="text-blue-400 hover:underline">PandaCodeur 🐾</a> et <a href="https://youtube.com/GeniusClassrooms" class="text-blue-400 hover:underline">GeniusClassrooms 🎓</a>.</p>
+                <p>Propulsé par <a href="#" class="text-blue-400 hover:underline">NkiliTech 🚀</a> - Par Yankam Ngueguim Joel Stephane.</p>
+            </div>
+        </div>
     </footer>
 
     <!-- Script pour le chat -->

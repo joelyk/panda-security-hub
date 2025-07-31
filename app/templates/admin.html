@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Administration - PandaSecurityHub{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+    <h1 class="text-3xl font-bold mb-6">Administration ⚙️</h1>
+    <h2 class="text-2xl font-bold mb-4">Gérer les autorisations de publication</h2>
+    <div class="card">
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-3 text-left">Utilisateur 👤</th>
+                    <th class="p-3 text-left">Email 📧</th>
+                    <th class="p-3 text-left">Autorisation de publication ✅</th>
+                    <th class="p-3 text-left">Action ⚡</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr class="border-b">
+                    <td class="p-3">{{ user.username }}</td>
+                    <td class="p-3">{{ user.email }}</td>
+                    <td class="p-3">{{ 'Oui' if user.can_publish else 'Non' }}</td>
+                    <td class="p-3">
+                        <form method="POST" action="{{ url_for('main.toggle_publish', user_id=user.id) }}">
+                            <button type="submit" class="btn {{ 'btn-danger' if user.can_publish else '' }}">
+                                {{ 'Retirer l\'autorisation' if user.can_publish else 'Autoriser à publier' }}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

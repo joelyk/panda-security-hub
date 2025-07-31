@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Modifier l'article - PandaSecurityHub{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <h1 class="text-3xl font-bold mb-6">Modifier l'article</h1>
+    <form method="POST" enctype="multipart/form-data" class="card p-6">
+        <div class="mb-4">
+            <label for="title" class="block text-sm font-medium">Titre</label>
+            <input type="text" name="title" id="title" class="w-full p-2 border rounded" value="{{ article.title }}" required>
+        </div>
+        <div class="mb-4">
+            <label for="summary" class="block text-sm font-medium">Résumé</label>
+            <textarea name="summary" id="summary" class="w-full p-2 border rounded" required>{{ article.summary }}</textarea>
+        </div>
+        <div class="mb-4">
+            <label for="content" class="block text-sm font-medium">Contenu</label>
+            <textarea name="content" id="content" class="w-full p-2 border rounded h-64" required>{{ article.content }}</textarea>
+        </div>
+        <div class="mb-4">
+            <label for="image" class="block text-sm font-medium">Image</label>
+            <input type="file" name="image" id="image" class="w-full p-2 border rounded" accept="image/*">
+            <p class="text-sm text-gray-600">Image actuelle : {{ article.image }}</p>
+        </div>
+        <button type="submit" class="btn">Enregistrer</button>
+    </form>
+</div>
+{% endblock %}

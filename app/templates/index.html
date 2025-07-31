@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}PandaSecurityHub{% endblock %}
+
+{% block content %}
+<div class="container py-8 flex">
+    <!-- Contenu principal -->
+    <div class="flex-1 pr-6">
+        <h1 class="text-4xl font-bold text-center mb-8">PandaSecurityHub 🐼</h1>
+        <p class="text-center mb-4 text-lg">Votre source d'actualités sur la cybersécurité et le réseau 🌐</p>
+        <p class="text-center mb-8">En partenariat avec <a href="https://pandacodeur.com" class="text-blue-600 hover:underline">PandaCodeur 🐾</a> et <a href="https://youtube.com/GeniusClassrooms" class="text-blue-600 hover:underline">GeniusClassrooms 🎓</a>. Propulsé par <a href="#" class="text-blue-600 hover:underline">NkiliTech 🚀</a>.</p>
+
+        <div id="visitor-count" class="text-center mb-8 text-lg font-semibold">Visiteurs : {{ visitor_count }} 👀</div>
+
+        <h2 class="text-3xl font-bold mb-6">Articles du moment 📚</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for article in articles %}
+            <div class="card">
+                <img src="{{ url_for('static', filename='img/' + article.image) }}" alt="{{ article.title }}" class="w-full h-48 object-cover rounded-t-xl">
+                <h3 class="text-xl font-bold mt-4">{{ article.title }} ✍️</h3>
+                <p class="text-gray-600 mt-2">{{ article.summary }}</p>
+                <a href="{{ url_for('main.article', article_id=article.id) }}" class="btn mt-4 inline-block">Voir plus 🔍</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Barre latérale pour le chat -->
+    {% if current_user.is_authenticated %}
+    <aside class="chat-container">
+        <h2 class="text-xl font-bold mb-4">Chat en direct 💬</h2>
+        <div id="chat-box" class="chat-box">
+            {% for message in messages %}
+            <div class="mb-3 text-sm p-2 bg-gray-100 rounded-lg">💬 {{ message.author.username }}: {{ message.content }}</div>
+            {% endfor %}
+        </div>
+        <div class="mt-4">
+            <input id="chat-input" type="text" class="chat-input" placeholder="Envoyer un message..." onkeypress="if(event.keyCode===13)sendMessage();">
+            <button onclick="sendMessage()" class="btn w-full">Envoyer 📩</button>
+        </div>
+    </aside>
+    {% else %}
+    <aside class="chat-container">
+        <h2 class="text-xl font-bold mb-4">Chat en direct 💬</h2>
+        <p class="text-center text-gray-600">Connectez-vous pour accéder au chat. 🔐</p>
+        <a href="{{ url_for('main.login') }}" class="btn w-full mt-4">Connexion 🔐</a>
+    </aside>
+    {% endif %}
+</div>
+
+<script>
+    const currentUser = "{{ current_user.username if current_user.is_authenticated else 'Anonyme' }}";
+</script>
+{% endblock %}

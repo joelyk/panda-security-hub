@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
     <h2 class="text-2xl font-bold mb-4">Publier un nouvel article</h2>
-    <form method="POST" class="card p-6 mb-8">
+    <form method="POST" enctype="multipart/form-data" class="card p-6 mb-8">
         <div class="mb-4">
             <label for="title" class="block text-sm font-medium">Titre</label>
             <input type="text" name="title" id="title" class="w-full p-2 border rounded" required>
@@ -19,6 +19,10 @@
             <label for="content" class="block text-sm font-medium">Contenu</label>
             <textarea name="content" id="content" class="w-full p-2 border rounded h-64" required></textarea>
         </div>
+        <div class="mb-4">
+            <label for="image" class="block text-sm font-medium">Image</label>
+            <input type="file" name="image" id="image" class="w-full p-2 border rounded" accept="image/*">
+        </div>
         <button type="submit" class="btn">Publier</button>
     </form>
 
@@ -28,7 +32,13 @@
             <div class="card">
                 <h3 class="text-xl font-bold">{{ article.title }}</h3>
                 <p class="text-gray-600">{{ article.summary }}</p>
-                <a href="{{ url_for('main.article', article_id=article.id) }}" class="btn mt-2 inline-block">Voir</a>
+                <div class="flex space-x-2 mt-2">
+                    <a href="{{ url_for('main.article', article_id=article.id) }}" class="btn inline-block">Voir</a>
+                    <a href="{{ url_for('main.edit_article', article_id=article.id) }}" class="btn inline-block">Modifier</a>
+                    <form method="POST" action="{{ url_for('main.delete_article', article_id=article.id) }}">
+                        <button type="submit" class="btn bg-red-600 hover:bg-red-700" onclick="return confirm('Voulez-vous vraiment supprimer cet article ?');">Supprimer</button>
+                    </form>
+                </div>
             </div>
         {% endfor %}
     </div>
