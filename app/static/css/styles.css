@@ -4,160 +4,225 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
 
-body {
-    @apply bg-gray-50 font-sans text-gray-800 antialiased;
-    font-family: 'Inter', sans-serif;
-    background-image: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    line-height: 1.6;
+/* ================ */
+/* THEME PRINCIPAL */
+/* ================ */
+:root {
+  --primary-color: #10b981; /* Vert émeraude */
+  --primary-dark: #059669;
+  --primary-light: #a7f3d0;
+  --dark-color: #1f2937; /* Gris foncé */
+  --light-color: #f9fafb;
+  --accent-color: #111827; /* Noir */
 }
 
-.navbar {
-    @apply bg-indigo-700 text-white shadow-sm sticky top-0 z-30 py-3;
-    font-family: 'Inter', sans-serif;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+/* ================ */
+/* COMPOSANTS AVANCÉS */
+/* ================ */
+
+/* Header amélioré */
+.header {
+  @apply bg-accent-color text-white shadow-md;
+  background: linear-gradient(135deg, var(--accent-color) 0%, #1f2937 100%);
 }
 
-.navbar a {
-    @apply px-5 py-2.5 text-base font-medium hover:bg-indigo-600 hover:text-white transition duration-200 rounded-md;
+/* Boutons thématisés */
+.btn-primary {
+  @apply bg-primary-color text-white px-6 py-3 rounded-lg font-medium 
+         hover:bg-primary-dark transition-all duration-300 
+         transform hover:scale-105 shadow-md;
 }
 
-.footer {
-    @apply bg-gray-800 text-gray-300 py-12 border-t border-gray-700 mt-16;
-    font-family: 'Inter', sans-serif;
+.btn-outline {
+  @apply border-2 border-primary-color text-primary-color bg-transparent 
+         px-6 py-3 rounded-lg font-medium hover:bg-primary-light 
+         transition-all duration-300;
 }
 
-.card {
-    @apply bg-white rounded-lg shadow-sm p-6 mb-6 border border-gray-100 hover:shadow-md transition duration-200;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+/* Cartes améliorées */
+.feature-card {
+  @apply bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 
+         hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1;
 }
 
-.btn {
-    @apply px-5 py-2.5 bg-indigo-600 text-white text-base font-semibold rounded-md hover:bg-indigo-500 transition duration-200;
-    box-shadow: 0 2px 5px rgba(59, 130, 246, 0.3);
+.feature-card img {
+  @apply w-full h-48 object-cover;
 }
 
-.btn-danger {
-    @apply bg-red-600 text-white px-5 py-2.5 rounded-md font-semibold text-base hover:bg-red-700 transition duration-200;
+.feature-card-body {
+  @apply p-6;
 }
 
-.chat-container {
-    @apply fixed right-8 top-24 w-80 bg-white rounded-lg shadow-sm border border-gray-100 p-4;
+/* Section hero */
+.hero {
+  @apply py-20 bg-gradient-to-r from-accent-color to-gray-800 text-white;
 }
 
-.chat-box {
-    @apply h-[calc(100vh-350px)] overflow-y-auto p-4 bg-gray-50 rounded-md mb-4 border border-gray-100;
+.hero-content {
+  @apply container mx-auto px-6 flex flex-col md:flex-row items-center;
 }
 
-.chat-input {
-    @apply border border-gray-200 p-2.5 w-full rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm;
+/* Formulaire premium */
+.premium-form {
+  @apply bg-white rounded-xl shadow-lg p-8 border border-gray-200;
 }
 
-.container {
-    @apply max-w-7xl mx-auto px-5;
+.premium-form input {
+  @apply w-full p-4 border border-gray-300 rounded-lg focus:ring-2 
+         focus:ring-primary-color focus:border-transparent;
 }
 
-.flash-message {
-    @apply rounded-md p-3 mb-4 border-l-4 shadow-sm text-sm;
+/* Tableau amélioré */
+.data-table {
+  @apply w-full rounded-lg overflow-hidden shadow-sm;
 }
 
-table {
-    @apply w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm;
+.data-table th {
+  @apply bg-accent-color text-white px-6 py-4 text-left;
 }
 
-th, td {
-    @apply p-3 border-b border-gray-100 text-left text-sm;
+.data-table td {
+  @apply px-6 py-4 border-b border-gray-100;
 }
 
-th {
-    @apply bg-gray-50 font-semibold text-gray-700;
+.data-table tr:hover {
+  @apply bg-gray-50;
 }
 
-/* Styles e-learning professionnels */
-h1 {
-    @apply text-3xl font-bold text-gray-900 mb-5;
-    font-family: 'Playfair Display', serif;
-    line-height: 1.3;
+/* ================ */
+/* COMPOSANTS E-LEARNING */
+/* ================ */
+
+/* Module de cours */
+.course-module {
+  @apply border-l-4 border-primary-color bg-gray-50 p-5 rounded-r-lg mb-6;
 }
 
-h2 {
-    @apply text-2xl font-semibold text-gray-800 mb-4;
-    font-family: 'Playfair Display', serif;
+.module-header {
+  @apply flex justify-between items-center mb-4;
 }
 
-h3 {
-    @apply text-xl font-medium text-gray-700 mb-3;
+.module-title {
+  @apply text-xl font-bold text-accent-color;
 }
 
-input, textarea, select {
-    @apply w-full p-2.5 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm;
-    transition: all 0.2s ease;
-}
-
-form {
-    @apply space-y-4;
-}
-
-label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
-}
-
-.youtube-embed {
-    @apply w-full bg-gray-50 p-3 rounded-lg;
-}
-
-iframe {
-    @apply w-full h-80 rounded-md border border-gray-200;
-}
-
-/* Ajouts spécifiques e-learning */
-.course-card {
-    @apply card hover:border-indigo-300 transition-colors duration-200;
+/* Progress tracker */
+.progress-container {
+  @apply bg-gray-200 rounded-full h-4;
 }
 
 .progress-bar {
-    @apply h-2 bg-gray-200 rounded-full overflow-hidden;
+  @apply bg-primary-color h-4 rounded-full;
 }
 
-.progress-fill {
-    @apply h-full bg-green-500;
+/* Quiz components */
+.quiz-card {
+  @apply bg-white p-6 rounded-lg shadow-md border border-gray-200;
 }
 
-.badge {
-    @apply inline-block px-2 py-1 text-xs font-semibold rounded-full;
+.quiz-question {
+  @apply text-lg font-semibold mb-4;
 }
 
-.badge-primary {
-    @apply bg-indigo-100 text-indigo-800;
+.quiz-option {
+  @apply block w-full p-4 mb-2 border border-gray-300 rounded-lg 
+         cursor-pointer hover:bg-gray-50 transition;
 }
 
-.badge-success {
-    @apply bg-green-100 text-green-800;
+.quiz-option.selected {
+  @apply bg-primary-light border-primary-color;
 }
 
-.lesson-item {
-    @apply flex items-center p-3 border-b border-gray-100 hover:bg-gray-50;
+/* Badges spécialisés */
+.badge-certified {
+  @apply bg-gradient-to-r from-primary-color to-green-400 text-white 
+         px-3 py-1 rounded-full text-xs font-bold;
 }
 
-.lesson-icon {
-    @apply text-indigo-500 mr-3;
+.badge-new {
+  @apply bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold;
 }
 
-/* Animation subtile pour l'interactivité */
-.transition-smooth {
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+/* ================ */
+/* EFFETS SPÉCIAUX */
+/* ================ */
+.hover-grow {
+  @apply transition-transform duration-300 hover:scale-105;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .container {
-        @apply px-4;
-    }
-    
-    .navbar a {
-        @apply px-3 py-2 text-sm;
-    }
-    
-    .chat-container {
-        @apply w-full right-0 left-0 top-auto bottom-0 rounded-t-lg;
-    }
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow-effect {
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+/* ================ */
+/* LAYOUT SPÉCIFIQUE */
+/* ================ */
+.split-section {
+  @apply flex flex-col md:flex-row;
+}
+
+.split-section > div {
+  @apply flex-1;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* ================ */
+/* RESPONSIVE */
+/* ================ */
+@media (max-width: 1024px) {
+  .hero-content {
+    @apply flex-col text-center;
+  }
+  
+  .split-section {
+    @apply flex-col;
+  }
+}
+
+@media (max-width: 640px) {
+  .feature-card {
+    @apply w-full;
+  }
+  
+  .btn-primary, .btn-outline {
+    @apply w-full block text-center;
+  }
+}
+
+/* ================ */
+/* UTILITAIRES PERSONNALISÉS */
+/* ================ */
+.filter-dropdown {
+  @apply appearance-none bg-white border border-gray-300 rounded-lg px-4 py-3 
+         pr-8 focus:outline-none focus:ring-2 focus:ring-primary-color 
+         focus:border-transparent;
+}
+
+.avatar {
+  @apply rounded-full object-cover;
+}
+
+.avatar-sm {
+  @apply h-10 w-10;
+}
+
+.avatar-md {
+  @apply h-16 w-16;
+}
+
+/* Animation de chargement */
+.loading-spinner {
+  @apply inline-block h-8 w-8 animate-spin rounded-full border-4 
+         border-solid border-primary-color border-r-transparent;
 }

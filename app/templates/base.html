@@ -1,95 +1,310 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PandaSecurityHub - {{ title }}</title>
+    <meta name="description" content="Plateforme d'éducation en cybersécurité et réseaux - PandaSecurityHub">
+    <title>PandaSecurityHub | {{ title }}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+    
+    <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+    <!-- OG Tags -->
+    <meta property="og:title" content="PandaSecurityHub | {{ title }}">
+    <meta property="og:description" content="Votre référence en éducation cybersécurité et réseaux">
+    <meta property="og:image" content="{{ url_for('static', filename='img/og-image.jpg') }}">
+    <meta property="og:url" content="{{ request.url }}">
 </head>
-<body>
-    <nav class="navbar flex items-center justify-between px-6 py-4">
-        <div class="flex items-center">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="PandaSecurityHub Logo" class="h-16 w-16 object-contain mr-4">
-            <a href="{{ url_for('main.index') }}" class="text-2xl font-bold text-white hover:underline">PandaSecurityHub</a>
-        </div>
-        <div class="flex space-x-4">
-            <a href="{{ url_for('main.index') }}" class="hover:underline">Accueil 🏠</a>
-            <a href="{{ url_for('main.about') }}" class="hover:underline">À propos ℹ️</a>
-            <a href="{{ url_for('main.services') }}" class="hover:underline">Services 🛠️</a>
-            <a href="{{ url_for('main.contact') }}" class="hover:underline">Contact 📧</a>
-            {% if current_user.is_authenticated %}
-                <a href="{{ url_for('main.profile') }}" class="hover:underline">Profil 👤</a>
-                {% if current_user.is_admin %}
-                    <a href="{{ url_for('main.admin') }}" class="hover:underline">Admin ⚙️</a>
+<body class="font-sans bg-gray-50 text-gray-900 antialiased">
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 bg-gray-900 shadow-md">
+        <nav class="container mx-auto px-6 py-3 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center space-x-4">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="PandaSecurityHub Logo" class="h-12 w-auto">
+                <a href="{{ url_for('main.index') }}" class="text-2xl font-bold text-white hover:text-green-400 transition-colors">PandaSecurityHub</a>
+            </div>
+            
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex items-center space-x-8">
+                <div class="flex space-x-6">
+                    <a href="{{ url_for('main.index') }}" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Accueil 🏠</a>
+                    <a href="{{ url_for('main.about') }}" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">À propos ℹ️</a>
+                    <a href="{{ url_for('main.services') }}" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Services 🛠️</a>
+                    <a href="{{ url_for('main.contact') }}" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact ✉️</a>
+                </div>
+                
+                <div class="border-l border-gray-700 h-6"></div>
+                
+                <div class="flex space-x-4 items-center">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('main.dashboard') }}" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                            </svg>
+                            Tableau de bord 📊
+                        </a>
+                        
+                        <div class="relative group" x-data="{ open: false }" @click.away="open = false">
+                            <button 
+                                @click="open = !open"
+                                class="flex items-center space-x-1 text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors focus:outline-none"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Mon compte 👤</span>
+                                <svg class="ml-1 h-4 w-4 transition-transform duration-200" :class="{ 'transform rotate-180': open }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            
+                            <div 
+                                x-show="open"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 translate-y-1"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 translate-y-1"
+                                class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl z-50 border border-gray-100 divide-y divide-gray-100"
+                            >
+                                <div class="px-4 py-3">
+                                    <p class="text-sm font-medium text-gray-900 truncate">{{ current_user.email }}</p>
+                                    <p class="text-xs text-gray-500 truncate">🟢 Connecté</p>
+                                </div>
+                                
+                                <div class="py-1">
+                                    <a href="{{ url_for('main.profile') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                        </svg>
+                                        Profil 👨‍💻
+                                    </a>
+                                    {% if current_user.is_admin %}
+                                    <a href="{{ url_for('main.admin') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                                        </svg>
+                                        Administration ⚙️
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="py-1">
+                                    <a href="{{ url_for('main.logout') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+                                        </svg>
+                                        Déconnexion 🚪
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('main.login') }}" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                            </svg>
+                            Connexion 🔑
+                        </a>
+                        <a href="{{ url_for('main.register') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
+                            </svg>
+                            Inscription 📝
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-gray-300 focus:outline-none" id="mobile-menu-button">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-gray-800" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="{{ url_for('main.index') }}" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Accueil 🏠</a>
+                <a href="{{ url_for('main.about') }}" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">À propos ℹ️</a>
+                <a href="{{ url_for('main.services') }}" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Services 🛠️</a>
+                <a href="{{ url_for('main.contact') }}" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Contact ✉️</a>
+            
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('main.dashboard') }}" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Tableau de bord 📊</a>
+                    <a href="{{ url_for('main.profile') }}" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Profil 👨‍💻</a>
+                    {% if current_user.is_admin %}
+                    <a href="{{ url_for('main.admin') }}" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Administration ⚙️</a>
+                    {% endif %}
+                    <a href="{{ url_for('main.logout') }}" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Déconnexion 🚪</a>
+                {% else %}
+                    <a href="{{ url_for('main.login') }}" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Connexion 🔑</a>
+                    <a href="{{ url_for('main.register') }}" class="block px-3 py-2 text-base font-medium text-white bg-green-600 rounded-md">Inscription 📝</a>
                 {% endif %}
-                <a href="{{ url_for('main.dashboard') }}" class="hover:underline">Dashboard 📝</a>
-                <a href="{{ url_for('main.logout') }}" class="hover:underline">Déconnexion 🚪</a>
-            {% else %}
-                <a href="{{ url_for('main.login') }}" class="hover:underline">Connexion 🔐</a>
-                <a href="{{ url_for('main.register') }}" class="hover:underline">Inscription 📋</a>
-            {% endif %}
+            </div>
         </div>
-    </nav>
+    </header>
 
-    <div class="container mx-auto py-10">
+    <!-- Main Content -->
+    <main class="min-h-screen pb-20">
+        <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash-message {{ 'bg-green-100 border-l-green-500' if category == 'success' else 'bg-red-100 border-l-red-500' }} mb-4">
-                        {{ message | safe }}
-                    </div>
-                {% endfor %}
+                <div class="container mx-auto px-6 py-4">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ 'bg-green-50 border-l-4 border-green-500 text-green-700' if category == 'success' else 'bg-red-50 border-l-4 border-red-500 text-red-700' }} p-4 mb-4 rounded-r">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    {% if category == 'success' %}
+                                        <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    {% else %}
+                                        <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                        </svg>
+                                    {% endif %}
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm">{{ message | safe }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
+        
+        <!-- Page Content -->
         {% block content %}{% endblock %}
-    </div>
+    </main>
 
-    <footer class="footer bg-black text-center py-12 border-t border-gray-800">
-    <div class="container mx-auto px-6">
-        <!-- Logo et slogan -->
-        <div class="mb-6">
-            <h3 class="text-xl font-semibold text-white mb-2">PandaSecurityHub</h3>
-            <p class="text-lg text-green-400">Votre référence en éducation cybersécurité et réseaux 🌐</p>
+    <!-- Chat Container -->
+    <div class="fixed bottom-6 right-6 z-40 w-80 bg-white rounded-t-xl shadow-xl border border-gray-200 transform transition-all duration-300 hover:shadow-2xl">
+        <div class="bg-green-600 text-white px-4 py-3 rounded-t-xl flex justify-between items-center">
+            <h3 class="font-semibold">Chat en direct 💬</h3>
+            <button id="toggle-chat" class="text-white hover:text-gray-200 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
         </div>
-
-        <!-- Partenariats -->
-        <div class="bg-gray-900 rounded-lg p-4 mb-6 max-w-2xl mx-auto">
-            <p class="text-gray-300 text-sm italic">En partenariat stratégique avec :</p>
-            <div class="flex justify-center items-center space-x-6 mt-2">
-                <span class="text-white font-medium">PandaCodeur</span>
-                <span class="text-green-300">•</span>
-                <span class="text-white font-medium">GeniusClassrooms</span>
+        <div id="chat-container" class="h-80 flex flex-col">
+            <div id="chat-box" class="flex-1 overflow-y-auto p-4 bg-gray-50 space-y-2"></div>
+            <div class="p-3 border-t border-gray-200">
+                <input type="text" id="chat-input" placeholder="Écrivez un message..." 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
             </div>
-            <p class="text-gray-400 text-sm mt-3">Collaboration pour l'excellence éducative en sécurité numérique</p>
-        </div>
-
-        <!-- Anecdote -->
-        <div class="bg-gray-800 rounded-lg p-4 mb-6 max-w-2xl mx-auto">
-            <p class="text-gray-300 text-md">
-                <span class="text-green-400 font-semibold">Saviez-vous ?</span> 
-                Un panda a inspiré nos outils de sécurité après avoir observé sa capacité à se protéger dans la nature 🐼
-            </p>
-        </div>
-
-        <!-- Copyright et crédits -->
-        <div class="mt-8">
-            <p class="text-gray-500 text-sm">
-                <span class="text-white">Propulsé par</span> 
-                <span class="text-green-400 font-medium">NkiliTech</span> 
-                <span class="text-white">🚀</span>
-            </p>
-            <p class="text-gray-400 text-xs mt-2">
-                Startup innovante dirigée par Yankam Ngueguim Joel Stephane
-            </p>
-            <p class="text-gray-500 text-xs mt-4">
-                © 2023 PandaSecurityHub - Engagement pour la sécurité numérique inclusive
-            </p>
         </div>
     </div>
-</footer>
 
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 border-t border-gray-800">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Brand Info -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="PandaSecurityHub Logo" class="h-10 w-auto">
+                        <span class="text-xl font-bold text-white">PandaSecurityHub</span>
+                    </div>
+                    <p class="text-sm mb-4">Votre référence en éducation cybersécurité et réseaux. 🚀</p>
+                    <p class="text-xs text-gray-500">© 2025 PandaSecurityHub. Tous droits réservés.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-white text-sm font-semibold mb-4 uppercase tracking-wider">Navigation</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('main.index') }}" class="text-sm hover:text-green-400 transition-colors">Accueil 🏠</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="text-sm hover:text-green-400 transition-colors">À propos ℹ️</a></li>
+                        <li><a href="{{ url_for('main.services') }}" class="text-sm hover:text-green-400 transition-colors">Services 🛠️</a></li>
+                        <li><a href="{{ url_for('main.contact') }}" class="text-sm hover:text-green-400 transition-colors">Contact ✉️</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Partners & Legal -->
+                <div>
+                    <h3 class="text-white text-sm font-semibold mb-4 uppercase tracking-wider">Partenaires</h3>
+                    <ul class="space-y-2 mb-6">
+                        <li><a href="#" class="text-sm hover:text-green-400 transition-colors">PandaCodeur 🐼</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-400 transition-colors">GeniusClassrooms 🎓</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-400 transition-colors">NkiliTech 💻</a></li>
+                    </ul>
+                    
+                    <h3 class="text-white text-sm font-semibold mb-4 uppercase tracking-wider">Légal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm hover:text-green-400 transition-colors">Mentions légales 📜</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-400 transition-colors">Confidentialité 🔒</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-400 transition-colors">CGU 📄</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Divider -->
+            <div class="border-t border-gray-800 mt-12 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <!-- Social Links -->
+                    <div class="flex space-x-6 mb-4 md:mb-0">
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
+                            <span class="sr-only">Twitter</span>
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
+                            <span class="sr-only">LinkedIn</span>
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
+                            <span class="sr-only">GitHub</span>
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <!-- Copyright -->
+                    <div class="text-xs text-gray-500">
+                        <p>Propulsé par <a href="#" class="text-green-400 hover:text-green-300 transition-colors">NkiliTech</a>, startup innovante dirigée par Yankam Ngueguim Joel Stephane. 💡</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    
+    <!-- Mobile Menu Toggle -->
+    <script>
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Toggle chat visibility
+        document.getElementById('toggle-chat').addEventListener('click', function() {
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.classList.toggle('hidden');
+            const icon = this.querySelector('svg');
+            icon.classList.toggle('transform');
+            icon.classList.toggle('rotate-180');
+        });
+    </script>
 </body>
 </html>
