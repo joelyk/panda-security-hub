@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Profil - PandaSecurityHub{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-md">
+    <h1 class="text-3xl font-bold text-center mb-6">Profil de {{ current_user.username }}</h1>
+    <div class="card p-6">
+        <p><strong>Nom d'utilisateur :</strong> {{ current_user.username }}</p>
+        <p><strong>Email :</strong> {{ current_user.email }}</p>
+        <a href="{{ url_for('main.dashboard') }}" class="btn mt-4 inline-block">Gérer mes articles</a>
+    </div>
+</div>
+{% endblock %}

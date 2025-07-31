@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - PandaSecurityHub{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+    <h2 class="text-2xl font-bold mb-4">Publier un nouvel article</h2>
+    <form method="POST" class="card p-6 mb-8">
+        <div class="mb-4">
+            <label for="title" class="block text-sm font-medium">Titre</label>
+            <input type="text" name="title" id="title" class="w-full p-2 border rounded" required>
+        </div>
+        <div class="mb-4">
+            <label for="summary" class="block text-sm font-medium">Résumé</label>
+            <textarea name="summary" id="summary" class="w-full p-2 border rounded" required></textarea>
+        </div>
+        <div class="mb-4">
+            <label for="content" class="block text-sm font-medium">Contenu</label>
+            <textarea name="content" id="content" class="w-full p-2 border rounded h-64" required></textarea>
+        </div>
+        <button type="submit" class="btn">Publier</button>
+    </form>
+
+    <h2 class="text-2xl font-bold mb-4">Mes articles</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for article in articles %}
+            <div class="card">
+                <h3 class="text-xl font-bold">{{ article.title }}</h3>
+                <p class="text-gray-600">{{ article.summary }}</p>
+                <a href="{{ url_for('main.article', article_id=article.id) }}" class="btn mt-2 inline-block">Voir</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
