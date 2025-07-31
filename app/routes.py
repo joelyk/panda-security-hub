@@ -29,7 +29,7 @@ def index():
     global visitor_count
     visitor_count += 1
     articles = Article.query.order_by(Article.date_posted.desc()).all()
-    messages = ChatMessage.query.order_by(ChatMessage.date_posted.asc()).all() if current_user.is_authenticated else []
+    messages = ChatMessage.query.order_by(ChatMessage.date_posted.asc()).all()
     return render_template('index.html', articles=articles, visitor_count=visitor_count, messages=messages)
 
 @bp.route('/article/<int:article_id>', methods=['GET', 'POST'])
@@ -54,7 +54,7 @@ def login():
         if user and check_password_hash(user.password, password):
             login_user(user)
             flash('Connexion réussie ! ✅', 'success')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.dashboard'))  # Redirige vers le dashboard
         flash('Email ou mot de passe incorrect. 🚫', 'danger')
     return render_template('login.html')
 
@@ -64,6 +64,10 @@ def register():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Cet email est déjà utilisé. Veuillez en choisir un autre. 🚫', 'danger')
+            return redirect(url_for('main.register'))
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         new_user = User(username=username, email=email, password=hashed_password)
         db.session.add(new_user)
@@ -94,6 +98,7 @@ def dashboard():
         title = request.form['title']
         content = request.form['content']
         summary = request.form['summary']
+        youtube_url = request.form['youtube_url'] if 'youtube_url' in request.form else None
         image_filename = 'placeholder.jpg'
         if 'image' in request.files:
             file = request.files['image']
@@ -101,7 +106,7 @@ def dashboard():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
                 image_filename = filename
-        article = Article(title=title, content=content, summary=summary, image=image_filename, user_id=current_user.id)
+        article = Article(title=title, content=content, summary=summary, image=image_filename, youtube_url=youtube_url, user_id=current_user.id)
         db.session.add(article)
         db.session.commit()
         flash('Article publié ! 📝', 'success')
@@ -120,6 +125,8 @@ def edit_article(article_id):
         article.title = request.form['title']
         article.content = request.form['content']
         article.summary = request.form['summary']
+        if 'youtube_url' in request.form:
+            article.youtube_url = request.form['youtube_url']
         if 'image' in request.files:
             file = request.files['image']
             if file and allowed_file(file.filename):

@@ -1,29 +1,37 @@
 {% extends "base.html" %}
-
-{% block title %}{{ article.title }} - PandaSecurityHub{% endblock %}
-
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-4">{{ article.title }}</h1>
-    <img src="{{ url_for('static', filename='img/' + article.image) }}" alt="{{ article.title }}" class="w-full h-64 object-cover rounded-lg mb-4">
-    <p class="text-gray-600 mb-2">Publié par {{ article.author.username }} le {{ article.date_posted.strftime('%d/%m/%Y') }}</p>
-    <div class="prose max-w-none mb-8">{{ article.content | safe }}</div>
-
-    <h2 class="text-2xl font-bold mb-4">Commentaires</h2>
+<div class="container mx-auto py-10">
+    <h1 class="text-4xl font-bold mb-6 text-gray-900">{{ article.title }}</h1>
+    <div class="flex items-center mb-4">
+        <p class="text-lg text-gray-700">Par : {{ article.user.username }} - {{ article.date_posted.strftime('%d/%m/%Y') }}</p>
+        {% if article.image and article.image != 'placeholder.jpg' %}
+            <img src="{{ url_for('static', filename='img/' + article.image) }}" alt="Image de l'article" class="ml-4 w-32 h-32 object-cover rounded-lg">
+        {% endif %}
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-xl border-2 border-gray-300 mb-6">
+        <p class="text-lg text-gray-800">{{ article.content }}</p>
+    </div>
+    <h2 class="text-2xl font-semibold mt-8 mb-4 text-gray-900">Commentaires 👀</h2>
     {% if current_user.is_authenticated %}
-        <form method="POST" class="mb-6">
-            <textarea name="content" class="w-full p-4 border rounded" placeholder="Ajouter un commentaire..." required></textarea>
-            <button type="submit" class="btn mt-2">Publier</button>
+        <form method="POST" action="" class="mb-6">
+            <textarea name="content" class="w-full p-4 border-2 border-gray-400 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600" placeholder="Ajoutez un commentaire..." required></textarea>
+            <button type="submit" class="btn mt-4">Envoyer 💬</button>
         </form>
     {% else %}
-        <p class="mb-6">Connectez-vous pour commenter. <a href="{{ url_for('main.login') }}" class="text-blue-600 hover:underline">Connexion</a></p>
+        <p class="text-gray-600 mb-6">Connectez-vous pour ajouter un commentaire. 🔐</p>
     {% endif %}
-
     {% for comment in comments %}
-        <div class="card mb-4">
-            <p class="text-gray-600">{{ comment.author.username }} - {{ comment.date_posted.strftime('%d/%m/%Y %H:%M') }}</p>
-            <p>{{ comment.content }}</p>
+        <div class="bg-gray-100 p-4 rounded-lg border border-gray-300 mb-4">
+            <p class="text-gray-800"><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+            <p class="text-sm text-gray-500">{{ comment.date_posted.strftime('%d/%m/%Y %H:%M') }}</p>
         </div>
     {% endfor %}
+    <!-- Espace publicitaire YouTube -->
+    <div class="mt-12 p-6 bg-gray-100 rounded-xl border-2 border-gray-300 shadow-lg">
+        <h3 class="text-xl font-semibold mb-4 text-gray-900">Publicité 🎥</h3>
+        <div class="youtube-embed">
+            <iframe src="{{ article.youtube_url | default('about:blank') }}" frameborder="0" allowfullscreen class="w-full h-64 rounded-lg" sandbox="allow-same-origin allow-scripts"></iframe>
+        </div>
+    </div>
 </div>
 {% endblock %}

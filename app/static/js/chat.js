@@ -1,29 +1,23 @@
-const socket = io();
-
-socket.on('connect', () => {
-    console.log('Connected to WebSocket');
-});
-
-socket.on('message', (data) => {
+document.addEventListener('DOMContentLoaded', (event) => {
+    const socket = io();
     const chatBox = document.getElementById('chat-box');
-    const message = document.createElement('div');
-    message.textContent = `💬 ${data.username}: ${data.message}`;
-    message.className = 'mb-3 text-sm p-2 bg-gray-100 rounded-lg';
-    chatBox.appendChild(message);
-    chatBox.scrollTop = chatBox.scrollHeight;
-});
+    const chatInput = document.getElementById('chat-input');
 
-socket.on('visitor_count', (data) => {
-    document.getElementById('visitor-count').textContent = `Visiteurs : ${data.count} 👀`;
-});
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && chatInput.value.trim()) {
+            socket.emit('message', { message: chatInput.value });
+            chatInput.value = '';
+        }
+    });
 
-function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const message = input.value;
-    if (message && currentUser !== 'Anonyme') {
-        socket.emit('message', { username: currentUser, message });
-        input.value = '';
-    } else if (currentUser === 'Anonyme') {
-        alert('Connectez-vous pour envoyer un message. 🔐');
-    }
-}
+    socket.on('message', (data) => {
+        const messageDiv = document.createElement('div');
+        messageDiv.innerHTML = `<p class="text-gray-800"><strong>${data.username}</strong>: ${data.message}</p><p class="text-sm text-gray-500">${new Date().toLocaleTimeString()}</p>`;
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    socket.on('visitor_count', (data) => {
+        console.log(`Nombre de visiteurs : ${data.count}`);
+    });
+});
